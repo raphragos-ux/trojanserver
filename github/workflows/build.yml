@@ -27,5 +27,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME_VIRGOZKI }}/trojan-server:latest
-            ${{ secrets.DOCKERHUB_USERNAME_VIRGOZKI }}/trojan-server:v1.0
+            ${{ secrets.DOCKERHUB_USERNAME_VIRGOZKI }}/trojanserver:latest
+            ${{ secrets.DOCKERHUB_USERNAME_VIRGOZKI }}/trojanserver:v1.0
