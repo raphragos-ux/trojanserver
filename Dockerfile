@@ -1,26 +1,27 @@
-# Base image: Alpine Linux (maliit at mabilis)
-FROM alpine:latest
+FROM alpine:3.19
 
-# Mag-install ng mga kailangang package
 RUN apk update && apk add --no-cache \
     nginx \
+    openssl \
     wget \
-    curl \
+    tar \
     bash
 
-# Gumawa ng folder para sa app
-WORKDIR /etc/trojan
+WORKDIR /app
 
-# Kopyahin ang mga file papuntang container
-COPY config.json /etc/trojan/config.json
+# I-download ang tamang Trojan Release
+RUN wget -O trojan.tar.xz https://github.com/trojan-gfw/trojan/releases/download/v1.16.0/trojan-1.16.0-linux-amd64.tar.xz && \
+    tar -xf trojan.tar.xz && \
+    mv trojan-1.16.0-linux-amd64/trojan /usr/local/bin/ && \
+    chmod +x /usr/local/bin/trojan && \
+    rm -rf trojan.tar.xz trojan-1.16.0-linux-amd64
+
+COPY config.json /app/config.json
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
 
-# Bigyan ng pahintulot ang entrypoint
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-# Buksan ang port
 EXPOSE 80 443
 
-# Simulan ang serbisyo
-CMD ["/entrypoint.sh"]
+CMD ["/app/entrypoint.sh"]
